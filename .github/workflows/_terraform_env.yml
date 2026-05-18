@@ -28,6 +28,8 @@ jobs:
   plan:
     name: Plan (${{ inputs.environment }})
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -47,14 +49,40 @@ jobs:
           ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
 
       - name: Terraform Plan
+        id: plan
         working-directory: ${{ inputs.working_dir }}
-        run: terraform plan
+        run: terraform plan -no-color 2>&1 | tee plan_output.txt
+        continue-on-error: true
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+      - name: Post Plan to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const planOutput = fs.readFileSync('${{ inputs.working_dir }}/plan_output.txt', 'utf8');
+            const status = '${{ steps.plan.outcome }}' === 'success' ? '✅' : '❌';
+            const body = `## ${status} Terraform Plan — \`${{ inputs.environment }}\`
+            \`\`\`hcl
+            ${planOutput.slice(0, 65000)}
+            \`\`\`
+            `;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail if plan failed
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
   apply:
     name: Apply (${{ inputs.environment }})
