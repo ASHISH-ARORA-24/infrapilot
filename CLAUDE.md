@@ -22,3 +22,18 @@ Commit messages must follow conventional commits format. Keep the statement shor
 | `refactor:` | code change, no feature or fix       |
 | `test:`     | adding or updating tests             |
 | `style:`    | formatting, linting                  |
+
+## Versioning Rules
+
+Versioning is handled automatically by `python-semantic-release` on merge to `main`.
+
+| Commit type  | Version bump          |
+|--------------|-----------------------|
+| `feat:`      | minor (0.1.0 → 0.2.0) |
+| `fix:`       | patch (0.1.0 → 0.1.1) |
+| `BREAKING CHANGE` | major (0.1.0 → 1.0.0) |
+| `chore:`, `ci:`, `docs:`, `style:`, `test:`, `refactor:` | no bump |
+
+- No pre-releases or beta releases
+- Only `feat:` and `fix:` trigger a version bump
+- Changelog is auto-updated in `CHANGELOG.md`
