@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.1 (2026-05-18)
+
+### Bug Fixes
+
+- Exclude deployment changes from app pipeline
+  ([`2bda59b`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/2bda59b514fffa5b9a7630aae0a2281f2213fee3))
+
+
 ## v1.2.0 (2026-05-18)
 
 ### Bug Fixes
