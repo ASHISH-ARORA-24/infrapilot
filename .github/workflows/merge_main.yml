@@ -107,11 +107,13 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Get version from pyproject.toml
-        id: version
+      - name: Get version and lowercase owner
+        id: meta
         run: |
           VERSION=$(grep "^version" pyproject.toml | head -1 | sed 's/version = "//' | sed 's/"//')
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "owner=$OWNER" >> $GITHUB_OUTPUT
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -126,5 +128,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/infrapilot:${{ steps.version.outputs.version }}
-            ghcr.io/${{ github.repository_owner }}/infrapilot:latest
+            ghcr.io/${{ steps.meta.outputs.owner }}/infrapilot:${{ steps.meta.outputs.version }}
+            ghcr.io/${{ steps.meta.outputs.owner }}/infrapilot:latest
