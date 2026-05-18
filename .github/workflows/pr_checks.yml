@@ -2,6 +2,11 @@ name: PR Checks
 
 on:
   pull_request:
+    paths-ignore:
+      - "deployment/**"
+      - ".github/**"
+      - "docs/**"
+      - "**.md"
 
 jobs:
   lint:
