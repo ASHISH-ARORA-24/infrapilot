@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.1.0 (2026-05-18)
+
+### Features
+
+- Add Dockerfile and Docker build pipeline
+  ([`6b83407`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/6b834077574abb3bc784502717490272d91d59aa))
+
+
 ## v1.0.1 (2026-05-18)
 
 ### Bug Fixes
