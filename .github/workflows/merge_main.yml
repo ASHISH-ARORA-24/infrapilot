@@ -6,6 +6,9 @@ on:
       - main
     paths-ignore:
       - "deployment/**"
+      - ".github/**"
+      - "docs/**"
+      - "**.md"
 
 permissions:
   contents: write
