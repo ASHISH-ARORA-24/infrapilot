@@ -15,14 +15,37 @@ dev = [
     "isort>=8.0.1",
     "pytest>=9.0.3",
     "pytest-django>=4.12.0",
+    "python-semantic-release>=10.5.3",
 ]
 
 [tool.black]
 line-length = 120
+target-version = ["py313"]
 
 [tool.isort]
 profile = "black"
 line_length = 120
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+upload_to_pypi = false
+build_command = false
+changelog_file = "CHANGELOG.md"
+major_on_zero = false
+allow_zero_minor = true
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["feat", "fix", "chore", "ci", "docs", "style", "test", "refactor"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "refactor"]
+
+[tool.semantic_release.changelog]
+changelog_sections = [
+    { type = "feat", section = "Features" },
+    { type = "fix", section = "Bug Fixes" },
+    { type = "refactor", section = "Refactoring" },
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "infrapilot.settings"
