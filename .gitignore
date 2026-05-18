@@ -14,3 +14,12 @@ db.sqlite3
 
 # Pytest
 .pytest_cache
+
+# Environment variables
+.env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+crash.log
