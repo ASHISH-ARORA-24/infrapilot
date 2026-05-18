@@ -1,0 +1,31 @@
+[project]
+name = "infrapilot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=6.0.5",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.0",
+    "flake8>=7.3.0",
+    "isort>=8.0.1",
+    "pytest>=9.0.3",
+    "pytest-django>=4.12.0",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "infrapilot.settings"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
