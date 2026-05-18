@@ -162,3 +162,11 @@ uv run pytest
 
 - Changed `line-length` from 88 to 120 in `pyproject.toml` for black and isort
 - Changed `max-line-length` from 88 to 120 in `setup.cfg` for flake8
+
+---
+
+## 16. Checked In Code to Git
+
+- Updated `.gitignore` to include `db.sqlite3` and `.pytest_cache`
+- Staged all files with `git add .`
+- Committed and pushed to remote repository
