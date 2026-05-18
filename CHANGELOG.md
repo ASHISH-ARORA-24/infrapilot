@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.1.1 (2026-05-18)
+
+### Bug Fixes
+
+- Lowercase image owner in docker push
+  ([`038fc69`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/038fc69935f999aec89b79636cb1185878cf5a0f))
+
+
 ## v1.1.0 (2026-05-18)
 
 ### Features
