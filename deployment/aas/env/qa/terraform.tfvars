@@ -1,0 +1,3 @@
+project         = "infrap"
+location        = "centralindia"
+subscription_id = "50e0c5b9-6745-44de-be51-ed9ece141ff5"

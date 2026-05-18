@@ -1,0 +1,91 @@
+name: AAS Terraform
+
+on:
+  pull_request:
+    paths:
+      - "deployment/aas/env/dev/**"
+      - "deployment/aas/env/qa/**"
+      - "deployment/aas/env/prod/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "deployment/aas/env/dev/**"
+      - "deployment/aas/env/qa/**"
+      - "deployment/aas/env/prod/**"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  detect:
+    name: Detect Changed Environments
+    runs-on: ubuntu-latest
+    outputs:
+      dev: ${{ steps.filter.outputs.dev }}
+      qa: ${{ steps.filter.outputs.qa }}
+      prod: ${{ steps.filter.outputs.prod }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            dev:
+              - "deployment/aas/env/dev/**"
+            qa:
+              - "deployment/aas/env/qa/**"
+            prod:
+              - "deployment/aas/env/prod/**"
+
+  dev:
+    name: Dev
+    needs: detect
+    if: needs.detect.outputs.dev == 'true'
+    uses: ./.github/workflows/_terraform_env.yml
+    with:
+      environment: dev
+      working_dir: deployment/aas/env/dev
+      apply: ${{ github.event_name == 'push' }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+  qa:
+    name: QA
+    needs: detect
+    if: needs.detect.outputs.qa == 'true'
+    uses: ./.github/workflows/_terraform_env.yml
+    with:
+      environment: qa
+      working_dir: deployment/aas/env/qa
+      apply: ${{ github.event_name == 'push' }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+  prod:
+    name: Prod
+    needs: detect
+    if: needs.detect.outputs.prod == 'true'
+    uses: ./.github/workflows/_terraform_env.yml
+    with:
+      environment: prod
+      working_dir: deployment/aas/env/prod
+      apply: ${{ github.event_name == 'push' }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
