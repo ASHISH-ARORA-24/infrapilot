@@ -26,3 +26,12 @@ module "resource_group" {
   environment     = "sandbox"
   location        = var.location
 }
+
+module "app_service_plan" {
+  source              = "../../../terraform/modules/app_service_plan"
+  project             = var.project
+  deployment_type     = "aas"
+  environment         = "sandbox"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+}
