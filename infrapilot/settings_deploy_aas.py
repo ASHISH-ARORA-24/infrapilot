@@ -12,3 +12,5 @@ DATABASES = {
         "NAME": "/home/db.sqlite3",
     }
 }
+
+STATIC_ROOT = "/home/staticfiles"
