@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.4.1 (2026-05-20)
+
+### Bug Fixes
+
+- Add STATIC_ROOT to AAS deployment settings
+  ([`fe93447`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/fe9344732e191ea144e5707af5cb01c3c4299986))
+
+### Refactoring
+
+- Split bootstrap job into bootstrap_acr and bootstrap_secrets
+  ([`d34164c`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/d34164c1d274b590a6690c415610e6da6bfbbafb))
+
+
 ## v1.4.0 (2026-05-20)
 
 ### Bug Fixes
