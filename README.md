@@ -1,5 +1,70 @@
 # Enterprise Multi-Deployment Learning Platform
 
+---
+
+# Prerequisites
+
+These are one-time manual setup steps required before the project pipelines can run.
+
+## 1. Azure Service Principal
+
+Create a service principal with `Contributor` on the subscription and `User Access Administrator` on `rg-infrap-bootstrap`:
+
+```bash
+az ad sp create-for-rbac --name "sp-infrapilot-cicd" --role Contributor \
+  --scopes /subscriptions/<subscription-id>
+
+az role assignment create \
+  --assignee <service-principal-client-id> \
+  --role "User Access Administrator" \
+  --scope /subscriptions/<subscription-id>/resourceGroups/rg-infrap-bootstrap
+```
+
+## 2. Terraform Remote State Storage
+
+Create the storage account for Terraform state (run once as your personal account):
+
+```bash
+az group create --name rg-infrap-bootstrap --location southindia
+az storage account create --name stinfrapilottf --resource-group rg-infrap-bootstrap --sku Standard_LRS
+az storage container create --name tfstate --account-name stinfrapilottf
+```
+
+## 3. GitHub Secrets
+
+Store these secrets in GitHub Actions (Settings → Secrets → Actions):
+
+| Secret | Description |
+|--------|-------------|
+| `AZURE_CLIENT_ID` | Service principal client ID |
+| `AZURE_CLIENT_SECRET` | Service principal client secret |
+| `AZURE_TENANT_ID` | Azure tenant ID |
+| `AZURE_SUBSCRIPTION_ID` | Azure subscription ID |
+| `ARM_ACCESS_KEY` | Storage account access key for Terraform state |
+| `GH_PAT` | GitHub Personal Access Token with `repo` scope — used by the bootstrap pipeline to auto-generate Django secret keys |
+
+## 4. GitHub Personal Access Token (GH_PAT)
+
+The bootstrap pipeline uses a PAT to auto-create Django secret keys as GitHub secrets on first run.
+
+Create a PAT at **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens** with **Secrets: Read and write** permission on this repository, then store it as the `GH_PAT` GitHub secret.
+
+## 5. Local Sandbox Setup (.env)
+
+Copy and fill in the values for local Terraform runs against sandbox:
+
+```bash
+ARM_CLIENT_ID=
+ARM_CLIENT_SECRET=
+ARM_TENANT_ID=
+ARM_SUBSCRIPTION_ID=
+ARM_ACCESS_KEY=
+TF_VAR_django_secret_key=   # generate with: python3 -c "import secrets; print(secrets.token_urlsafe(50))"
+GH_PAT=                     # same PAT as stored in GitHub secrets
+```
+
+---
+
 ## Project Vision
 
 This project is a complete enterprise-style learning platform designed to teach:
