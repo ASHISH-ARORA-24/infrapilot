@@ -10,4 +10,8 @@ resource "azurerm_service_plan" "this" {
     deployment_type = var.deployment_type
     environment     = var.environment
   }
+
+  timeouts {
+    create = "30m"
+  }
 }
