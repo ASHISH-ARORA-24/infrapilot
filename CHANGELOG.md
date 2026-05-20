@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v1.4.0 (2026-05-20)
+
+### Bug Fixes
+
+- Move os import to top and suppress noqa for settings wildcard import
+  ([`bebbe68`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/bebbe6830bfdf7837a73785e144fd5d54f3c6a9d))
+
+### Chores
+
+- Remove ghcr.io push, use ACR as sole image registry
+  ([`936c6cb`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/936c6cbd47204a1360456e3d3533f8bd928ba8e7))
+
+### Features
+
+- Add AAS Django settings and SQLite on persistent storage
+  ([`7e05827`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/7e0582732a534da31996c63b064499053e37431e))
+
+- Add bootstrap secrets script and document prerequisites
+  ([`5a84e90`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/5a84e90fb5df91709b33482d8a7b7da7322f2ef5))
+
+- Add per-environment Django secret keys with AAS naming
+  ([`434bed8`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/434bed816b393eba834e77e8e20b190acc89c395))
+
+
 ## v1.3.0 (2026-05-20)
 
 ### Bug Fixes
