@@ -2,6 +2,39 @@
 
 <!-- version list -->
 
+## v1.3.0 (2026-05-20)
+
+### Bug Fixes
+
+- Allow rg deletion with untracked resources and extend asp create timeout
+  ([`ebb95e8`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/ebb95e820900ae652c235264f88c7300537104d2))
+
+- Change all env locations to southindia
+  ([`6a39da9`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/6a39da985d039ac8205047271a587723a3ba9218))
+
+- Complete paths-ignore for app and PR pipelines
+  ([`f96ff80`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/f96ff80bd2d977389b710848dc2dd1725286ae30))
+
+- Set DEFAULT_AUTO_FIELD to suppress Django warnings
+  ([`c7c8edc`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/c7c8edc99a2c0200a056a15b7f164f214ffd53ad))
+
+### Continuous Integration
+
+- Add aas destroy and apply pipelines
+  ([`9069046`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/9069046a1a7fb87e50147a5659a74583f09eb466))
+
+### Features
+
+- Add ACR bootstrap pipeline and app service module
+  ([`07eea1c`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/07eea1c446a6b9ed6cfd6895b5b378057c59fc37))
+
+- Add app_service_plan terraform module
+  ([`03c0e1a`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/03c0e1aa715228a4fafc0a6e1e2320f42d593404))
+
+- Wire app_service_plan module into dev environment
+  ([`b3e42a0`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/b3e42a0901de22f375ec9a125bcc8629613f7deb))
+
+
 ## v1.2.1 (2026-05-18)
 
 ### Bug Fixes
