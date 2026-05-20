@@ -101,6 +101,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: release
 
+    permissions:
+      contents: read
+      secrets: write
+
     steps:
       - name: Azure Login
         uses: azure/login@v2
@@ -126,6 +130,18 @@ jobs:
           if [ "$EXISTING" = "0" ]; then
             az role assignment create --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID
           fi
+
+      - name: Ensure Django secret keys exist for pipeline environments
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for ENV in DEV QA PROD; do
+            SECRET_NAME="TF_VAR_DJANGO_SECRET_KEY_AAS_${ENV}"
+            if ! gh secret list | grep -q "^${SECRET_NAME}"; then
+              SECRET_VALUE=$(python3 -c "import secrets; print(secrets.token_urlsafe(50))")
+              gh secret set "$SECRET_NAME" --body "$SECRET_VALUE"
+            fi
+          done
 
   docker:
     name: Build and Push Docker Image

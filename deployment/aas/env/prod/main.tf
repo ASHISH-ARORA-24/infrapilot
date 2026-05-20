@@ -30,3 +30,23 @@ module "resource_group" {
   environment     = "prod"
   location        = var.location
 }
+
+module "app_service_plan" {
+  source              = "../../../terraform/modules/app_service_plan"
+  project             = var.project
+  deployment_type     = "aas"
+  environment         = "prod"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+}
+
+module "app_service" {
+  source              = "../../../terraform/modules/app_service"
+  project             = var.project
+  deployment_type     = "aas"
+  environment         = "prod"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  service_plan_id     = module.app_service_plan.id
+  django_secret_key   = var.django_secret_key
+}

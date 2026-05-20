@@ -47,7 +47,7 @@ variable "image_tag" {
   default     = "latest"
 }
 
-variable "secret_key" {
+variable "django_secret_key" {
   description = "Django SECRET_KEY"
   type        = string
   sensitive   = true
