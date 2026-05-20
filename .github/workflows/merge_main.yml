@@ -96,10 +96,41 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  bootstrap:
+    name: Bootstrap ACR
+    runs-on: ubuntu-latest
+    needs: release
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
+      - name: Ensure bootstrap resource group exists
+        run: |
+          if ! az group show --name rg-infrap-bootstrap &>/dev/null; then
+            az group create --name rg-infrap-bootstrap --location southindia
+          fi
+
+      - name: Ensure ACR exists
+        run: |
+          if ! az acr show --name crinfrap --resource-group rg-infrap-bootstrap &>/dev/null; then
+            az acr create --resource-group rg-infrap-bootstrap --name crinfrap --sku Basic --admin-enabled false
+          fi
+
+      - name: Ensure AcrPush role for service principal
+        run: |
+          ACR_ID=$(az acr show --name crinfrap --query id -o tsv)
+          EXISTING=$(az role assignment list --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID --query "length(@)" -o tsv)
+          if [ "$EXISTING" = "0" ]; then
+            az role assignment create --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID
+          fi
+
   docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
-    needs: release
+    needs: bootstrap
 
     permissions:
       contents: read
@@ -127,6 +158,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: crinfrap.azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -135,3 +173,5 @@ jobs:
           tags: |
             ghcr.io/${{ steps.meta.outputs.owner }}/infrapilot:${{ steps.meta.outputs.version }}
             ghcr.io/${{ steps.meta.outputs.owner }}/infrapilot:latest
+            crinfrap.azurecr.io/infrapilot:${{ steps.meta.outputs.version }}
+            crinfrap.azurecr.io/infrapilot:latest
