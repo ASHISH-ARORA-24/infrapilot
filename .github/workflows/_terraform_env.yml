@@ -23,6 +23,8 @@ on:
         required: true
       ARM_ACCESS_KEY:
         required: true
+      DJANGO_SECRET_KEY:
+        required: true
 
 jobs:
   plan:
@@ -59,6 +61,7 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          TF_VAR_django_secret_key: ${{ secrets.DJANGO_SECRET_KEY }}
 
       - name: Post Plan to PR
         if: github.event_name == 'pull_request'
@@ -116,3 +119,4 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          TF_VAR_django_secret_key: ${{ secrets.DJANGO_SECRET_KEY }}

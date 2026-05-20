@@ -61,6 +61,7 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_DEV }}
 
   qa:
     name: QA
@@ -77,6 +78,7 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_QA }}
 
   prod:
     name: Prod
@@ -93,3 +95,4 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_PROD }}

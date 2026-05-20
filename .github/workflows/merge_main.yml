@@ -102,6 +102,9 @@ jobs:
     needs: release
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -126,6 +129,11 @@ jobs:
           if [ "$EXISTING" = "0" ]; then
             az role assignment create --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID
           fi
+
+      - name: Ensure Django secret keys exist for pipeline environments
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: bash scripts/bootstrap_secrets.sh
 
   docker:
     name: Build and Push Docker Image

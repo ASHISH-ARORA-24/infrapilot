@@ -25,6 +25,8 @@ resource "azurerm_linux_web_app" "this" {
   app_settings = {
     WEBSITES_PORT   = "8000"
     DEPLOYMENT_TYPE = var.deployment_type
+    SECRET_KEY      = var.django_secret_key
+    ALLOWED_HOSTS   = "app-${var.project}-${var.deployment_type}-${var.environment}.azurewebsites.net"
   }
 
   tags = {
