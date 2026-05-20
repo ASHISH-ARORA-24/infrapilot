@@ -48,4 +48,5 @@ module "app_service" {
   location            = var.location
   resource_group_name = module.resource_group.name
   service_plan_id     = module.app_service_plan.id
+  secret_key          = var.secret_key
 }

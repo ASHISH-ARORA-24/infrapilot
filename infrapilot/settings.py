@@ -118,3 +118,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+import os
+
+DEPLOYMENT_TYPE = os.getenv("DEPLOYMENT_TYPE", "local")
+
+if DEPLOYMENT_TYPE == "aas":
+    from infrapilot.settings_deploy_aas import *

@@ -13,3 +13,9 @@ variable "subscription_id" {
   description = "Azure subscription ID"
   type        = string
 }
+
+variable "secret_key" {
+  description = "Django SECRET_KEY"
+  type        = string
+  sensitive   = true
+}
