@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v1.4.2 (2026-05-21)
+
+### Bug Fixes
+
+- Authenticate app service to acr via managed identity
+  ([`5104d33`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/5104d33b7d2ae5a3dca950319398eea7c86320c5))
+
+- Trust azure proxy for https and csrf in aas settings
+  ([`439f9fe`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/439f9fe1d96182fdc1112ed57a9e8c7020958577))
+
+### Continuous Integration
+
+- Add manual terraform state unlock workflow
+  ([`7d4984f`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/7d4984ff2deaab53a57481e20c55600344144f49))
+
+- Serialize terraform runs per environment to prevent state lock collisions
+  ([`8961eaf`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/8961eaff2a31f233d4e3e8c365dd900238f5cd83))
+
+### Documentation
+
+- Add teaching-after-code-changes workflow
+  ([`5059c0b`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/5059c0b1b409afd2e4218f9d0cca0a04790a67ec))
+
+
 ## v1.4.1 (2026-05-20)
 
 ### Bug Fixes
