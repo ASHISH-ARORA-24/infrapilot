@@ -50,7 +50,7 @@ jobs:
     name: Dev
     needs: detect
     if: needs.detect.outputs.dev == 'true'
-    uses: ./.github/workflows/_terraform_env.yml
+    uses: ./.github/workflows/_aas_tf_env.yml
     with:
       environment: dev
       working_dir: deployment/aas/env/dev
@@ -67,7 +67,7 @@ jobs:
     name: QA
     needs: detect
     if: needs.detect.outputs.qa == 'true'
-    uses: ./.github/workflows/_terraform_env.yml
+    uses: ./.github/workflows/_aas_tf_env.yml
     with:
       environment: qa
       working_dir: deployment/aas/env/qa
@@ -84,7 +84,7 @@ jobs:
     name: Prod
     needs: detect
     if: needs.detect.outputs.prod == 'true'
-    uses: ./.github/workflows/_terraform_env.yml
+    uses: ./.github/workflows/_aas_tf_env.yml
     with:
       environment: prod
       working_dir: deployment/aas/env/prod
