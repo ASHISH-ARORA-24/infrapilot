@@ -19,6 +19,10 @@ permissions:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+concurrency:
+  group: tf-aas-${{ inputs.environment }}
+  cancel-in-progress: false
+
 jobs:
   apply:
     name: Apply (${{ inputs.environment }})
@@ -43,7 +47,7 @@ jobs:
 
       - name: Terraform Apply
         working-directory: deployment/aas/env/${{ inputs.environment }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock-timeout=5m
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}

@@ -15,6 +15,9 @@ jobs:
   destroy:
     name: Destroy (${{ matrix.environment }})
     runs-on: ubuntu-latest
+    concurrency:
+      group: tf-aas-${{ matrix.environment }}
+      cancel-in-progress: false
     strategy:
       matrix:
         environment: [sandbox, dev, qa, prod]
@@ -39,7 +42,7 @@ jobs:
 
       - name: Terraform Destroy
         working-directory: deployment/aas/env/${{ matrix.environment }}
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve -lock-timeout=5m
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
