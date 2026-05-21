@@ -1,0 +1,41 @@
+name: AAS TF Unlock State
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment whose state lock to release"
+        required: true
+        type: choice
+        options:
+          - sandbox
+          - dev
+          - qa
+          - prod
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: tf-aas-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  unlock:
+    name: Unlock (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Break Terraform state lock
+        run: |
+          az storage blob lease break \
+            --account-name stinfrapilottf \
+            --container-name tfstate \
+            --blob-name "aas_${ENVIRONMENT}.tfstate" \
+            --account-key "$ARM_ACCESS_KEY"
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          ENVIRONMENT: ${{ inputs.environment }}
