@@ -4,6 +4,26 @@
 - Before acting, confirm the plan with the user.
 - Wait for explicit go-ahead before proceeding.
 
+## Teaching After Code Changes
+
+After making any code changes, do NOT immediately commit, push, or create a PR.
+
+Instead, follow these steps in order:
+
+1. **Teach first** — Explain every file you changed, what you changed in it, and why. Use simple language as if teaching a beginner. For each change, explain:
+   - What the file/code does
+   - What specifically changed
+   - Why it was necessary
+   - How it connects to the bigger picture
+
+2. **Ask to commit** — After the explanation, ask: "Shall I commit these changes?"
+
+3. **Ask to push** — After committing, ask: "Shall I push to remote?"
+
+4. **Ask to create PR** — After pushing, ask: "Shall I create a PR?"
+
+Never combine these steps. Each one requires explicit approval before proceeding to the next.
+
 ## Django
 
 - All views must be function-based views (FBV). Class-based views (CBV) are not allowed.
