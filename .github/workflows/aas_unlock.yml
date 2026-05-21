@@ -1,0 +1,60 @@
+name: AAS Unlock State
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment whose state lock to release"
+        required: true
+        type: choice
+        options:
+          - sandbox
+          - dev
+          - qa
+          - prod
+      lock_id:
+        description: "Lock ID from the 'state blob is already locked' error"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: tf-aas-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  unlock:
+    name: Unlock (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: deployment/aas/env/${{ inputs.environment }}
+        run: terraform init
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+      - name: Terraform Force Unlock
+        working-directory: deployment/aas/env/${{ inputs.environment }}
+        run: terraform force-unlock -force "${{ inputs.lock_id }}"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
