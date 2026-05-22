@@ -26,16 +26,16 @@ provider "azurerm" {
 module "resource_group" {
   source          = "../../../terraform/modules/resource_group"
   project         = var.project
-  deployment_type = "aas"
-  environment     = "prod"
+  deployment_type = var.deployment_type
+  environment     = var.environment
   location        = var.location
 }
 
 module "app_service_plan" {
   source              = "../../../terraform/modules/app_service_plan"
   project             = var.project
-  deployment_type     = "aas"
-  environment         = "prod"
+  deployment_type     = var.deployment_type
+  environment         = var.environment
   location            = var.location
   resource_group_name = module.resource_group.name
 }
@@ -43,8 +43,8 @@ module "app_service_plan" {
 module "app_service" {
   source              = "../../../terraform/modules/app_service"
   project             = var.project
-  deployment_type     = "aas"
-  environment         = "prod"
+  deployment_type     = var.deployment_type
+  environment         = var.environment
   location            = var.location
   resource_group_name = module.resource_group.name
   service_plan_id     = module.app_service_plan.id

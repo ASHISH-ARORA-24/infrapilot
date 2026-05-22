@@ -1,7 +1,16 @@
 variable "project" {
   description = "Short project name used in resource naming"
   type        = string
-  default     = "infrap"
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "deployment_type" {
+  description = "Deployment type"
+  type        = string
 }
 
 variable "location" {

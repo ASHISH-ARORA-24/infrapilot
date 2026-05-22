@@ -6,7 +6,7 @@ resource "azurerm_service_plan" "this" {
   sku_name            = var.sku_name
 
   tags = {
-    project         = "infrapilot"
+    project         = var.project
     deployment_type = var.deployment_type
     environment     = var.environment
   }
