@@ -4,6 +4,19 @@ on:
   schedule:
     - cron: "0 */4 * * *"
   workflow_dispatch:
+    inputs:
+      log_level:
+        description: "Terraform log level (none = normal output)"
+        required: false
+        type: choice
+        default: none
+        options:
+          - none
+          - DEBUG
+          - TRACE
+          - INFO
+          - WARN
+          - ERROR
 
 permissions:
   contents: read
@@ -28,7 +41,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
-      TF_LOG: DEBUG
 
     steps:
       - name: Checkout code
@@ -36,6 +48,10 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+
+      - name: Configure Terraform logging
+        if: inputs.log_level != '' && inputs.log_level != 'none'
+        run: echo "TF_LOG=${{ inputs.log_level }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         working-directory: deployment/aas/env/${{ matrix.environment }}
