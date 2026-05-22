@@ -1,4 +1,4 @@
-name: AAS Apply
+name: AAS TF Apply
 
 on:
   workflow_dispatch:

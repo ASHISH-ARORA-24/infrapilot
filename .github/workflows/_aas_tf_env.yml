@@ -1,4 +1,4 @@
-name: Terraform Environment (Reusable)
+name: AAS Terraform Environment (Reusable)
 
 on:
   workflow_call:

@@ -1,4 +1,4 @@
-name: AAS Terraform
+name: AAS Terraform Plan and Apply
 
 on:
   pull_request:
