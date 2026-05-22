@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "this" {
   location = var.location
 
   tags = {
-    project         = "infrapilot"
+    project         = var.project
     deployment_type = var.deployment_type
     environment     = var.environment
   }

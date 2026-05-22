@@ -48,7 +48,32 @@ variable "image_tag" {
 }
 
 variable "django_secret_key" {
-  description = "Django SECRET_KEY"
+  description = "Django SECRET_KEY (used directly when key_vault_name is not set)"
   type        = string
   sensitive   = true
+  default     = ""
+}
+
+variable "key_vault_name" {
+  description = "Key Vault name for secret references (leave empty to use direct values)"
+  type        = string
+  default     = ""
+}
+
+variable "db_host" {
+  description = "PostgreSQL server FQDN"
+  type        = string
+  default     = ""
+}
+
+variable "db_name" {
+  description = "PostgreSQL database name"
+  type        = string
+  default     = ""
+}
+
+variable "db_user" {
+  description = "PostgreSQL admin username"
+  type        = string
+  default     = ""
 }

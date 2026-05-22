@@ -24,15 +24,24 @@ resource "azurerm_linux_web_app" "this" {
     }
   }
 
-  app_settings = {
-    WEBSITES_PORT   = "8000"
-    DEPLOYMENT_TYPE = var.deployment_type
-    SECRET_KEY      = var.django_secret_key
-    ALLOWED_HOSTS   = "app-${var.project}-${var.deployment_type}-${var.environment}.azurewebsites.net"
-  }
+  app_settings = merge(
+    {
+      WEBSITES_PORT   = "8000"
+      DEPLOYMENT_TYPE = var.deployment_type
+      ALLOWED_HOSTS   = "app-${var.project}-${var.deployment_type}-${var.environment}.azurewebsites.net"
+      SECRET_KEY      = var.key_vault_name != "" ? "@Microsoft.KeyVault(VaultName=${var.key_vault_name};SecretName=django-secret-key)" : var.django_secret_key
+    },
+    var.db_host != "" ? {
+      DB_HOST     = var.db_host
+      DB_NAME     = var.db_name
+      DB_USER     = var.db_user
+      DB_PASSWORD = "@Microsoft.KeyVault(VaultName=${var.key_vault_name};SecretName=db-admin-password)"
+      DB_PORT     = "5432"
+    } : {}
+  )
 
   tags = {
-    project         = "infrapilot"
+    project         = var.project
     deployment_type = var.deployment_type
     environment     = var.environment
   }

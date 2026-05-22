@@ -1,3 +1,5 @@
 project         = "infrap"
 location        = "southindia"
 subscription_id = "50e0c5b9-6745-44de-be51-ed9ece141ff5"
+environment     = "dev"
+deployment_type = "aas"
