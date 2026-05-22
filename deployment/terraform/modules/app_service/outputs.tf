@@ -17,3 +17,8 @@ output "principal_id" {
   description = "Managed identity principal ID"
   value       = azurerm_linux_web_app.this.identity[0].principal_id
 }
+
+output "staging_principal_id" {
+  description = "Staging slot managed identity principal ID"
+  value       = azurerm_linux_web_app_slot.staging.identity[0].principal_id
+}
