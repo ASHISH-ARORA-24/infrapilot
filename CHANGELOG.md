@@ -2,6 +2,40 @@
 
 <!-- version list -->
 
+## v1.5.0 (2026-05-22)
+
+### Continuous Integration
+
+- Add scheduled sandbox destroy pipeline
+  ([`4d32ae3`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/4d32ae3457a4ca6cd5d7cbb8fad334311a21234d))
+
+- Automate aas tf state unlock to environment-only
+  ([`cde5060`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/cde5060cf4e4bb520c31ac2a15cbd49579f0664c))
+
+- Fix naming of the pipelines
+  ([`aa62ff7`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/aa62ff7d1afae4bf95cea31553e9d29a0ac14130))
+
+- Make destroy tf log level a manual input
+  ([`8e863c7`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/8e863c75dfc945d530bae97eece21a5c9ecba2ea))
+
+- Normalize workflow display names to title case
+  ([`85e121b`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/85e121b4be8a5c6d816a0a389cd85492148b19b7))
+
+- Reduce destroy schedule from every 4 hours to every hour
+  ([`2b73ec5`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/2b73ec5cd1ac204cd83a1910ff370ce628657cf3))
+
+- Rename workflows to <deployment>_<component>_<action> convention
+  ([`e17d46d`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/e17d46dd539094770c42ec043a23223dedd6c7ce))
+
+- Scope aas pipelines to dev/qa/prod and fix destroy secret
+  ([`4c7a675`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/4c7a67569927c900d699559e96d684c1f6cacc0a))
+
+### Features
+
+- Add postgresql and keyvault modules, remove hardcoding from env configs
+  ([`ce82d42`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/ce82d425a7f8e4e8775be55a1ccf0d010e1b26e3))
+
+
 ## v1.4.2 (2026-05-21)
 
 ### Bug Fixes
