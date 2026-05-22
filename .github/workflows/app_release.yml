@@ -1,4 +1,4 @@
-name: Merge to Main
+name: App Release (Merge to Main)
 
 on:
   push:

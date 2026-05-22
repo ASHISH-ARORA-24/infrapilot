@@ -1,4 +1,4 @@
-name: AAS Apply
+name: AAS TF Apply
 
 on:
   workflow_dispatch:
@@ -8,7 +8,6 @@ on:
         required: true
         type: choice
         options:
-          - sandbox
           - dev
           - qa
           - prod
@@ -27,6 +26,12 @@ jobs:
   apply:
     name: Apply (${{ inputs.environment }})
     runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
 
     steps:
       - name: Checkout code
@@ -38,19 +43,19 @@ jobs:
       - name: Terraform Init
         working-directory: deployment/aas/env/${{ inputs.environment }}
         run: terraform init
+
+      - name: Resolve django secret key
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          SECRET_DEV: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_DEV }}
+          SECRET_QA: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_QA }}
+          SECRET_PROD: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_PROD }}
+        run: |
+          case "${{ inputs.environment }}" in
+            dev)  echo "TF_VAR_django_secret_key=$SECRET_DEV"  >> $GITHUB_ENV ;;
+            qa)   echo "TF_VAR_django_secret_key=$SECRET_QA"   >> $GITHUB_ENV ;;
+            prod) echo "TF_VAR_django_secret_key=$SECRET_PROD" >> $GITHUB_ENV ;;
+          esac
 
       - name: Terraform Apply
         working-directory: deployment/aas/env/${{ inputs.environment }}
         run: terraform apply -auto-approve -lock-timeout=5m
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
