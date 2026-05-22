@@ -1,4 +1,4 @@
-name: AAS TF Destroy
+name: Aas TF Destroy
 
 on:
   schedule:

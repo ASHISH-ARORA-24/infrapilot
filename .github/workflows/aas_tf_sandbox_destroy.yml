@@ -1,4 +1,4 @@
-name: AAS TF Sandbox Destroy
+name: Aas TF Sandbox Destroy
 
 on:
   schedule:

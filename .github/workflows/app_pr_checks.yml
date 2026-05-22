@@ -1,4 +1,4 @@
-name: APP PR Checks
+name: App PR Checks
 
 on:
   pull_request:

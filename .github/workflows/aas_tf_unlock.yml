@@ -1,4 +1,4 @@
-name: AAS TF Unlock State
+name: Aas TF Unlock State
 
 on:
   workflow_dispatch:
