@@ -40,7 +40,7 @@ jobs:
             --docker-custom-image-name ${{ env.ACR }}/${{ env.IMAGE }}:latest
 
   swap_dev:
-    name: Swap Dev to Production
+    name: Swap Dev Slots
     runs-on: ubuntu-latest
     needs: deploy_dev
     environment: dev
@@ -78,7 +78,7 @@ jobs:
             --docker-custom-image-name ${{ env.ACR }}/${{ env.IMAGE }}:latest
 
   swap_qa:
-    name: Swap QA to Production
+    name: Swap QA Slots
     runs-on: ubuntu-latest
     needs: deploy_qa
     environment: qa
@@ -116,7 +116,7 @@ jobs:
             --docker-custom-image-name ${{ env.ACR }}/${{ env.IMAGE }}:latest
 
   swap_prod:
-    name: Swap Prod to Production
+    name: Swap Prod Slots
     runs-on: ubuntu-latest
     needs: deploy_prod
     environment: prod
