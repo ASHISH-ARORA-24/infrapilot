@@ -27,5 +27,5 @@ variable "resource_group_name" {
 variable "sku_name" {
   description = "App Service Plan SKU (e.g. B1, B2, P1v3)"
   type        = string
-  default     = "B1"
+  default     = "S1"
 }

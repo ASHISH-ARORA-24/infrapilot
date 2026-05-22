@@ -87,3 +87,11 @@ resource "azurerm_key_vault_access_policy" "app_service" {
 
   secret_permissions = ["Get", "List"]
 }
+
+resource "azurerm_key_vault_access_policy" "app_service_staging" {
+  key_vault_id = module.keyvault.id
+  tenant_id    = module.keyvault.tenant_id
+  object_id    = module.app_service.staging_principal_id
+
+  secret_permissions = ["Get", "List"]
+}
