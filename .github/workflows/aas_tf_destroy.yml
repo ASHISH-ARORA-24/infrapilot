@@ -1,4 +1,4 @@
-name: AAS Destroy
+name: AAS TF Destroy
 
 on:
   schedule:
@@ -20,8 +20,15 @@ jobs:
       cancel-in-progress: false
     strategy:
       matrix:
-        environment: [sandbox, dev, qa, prod]
+        environment: [dev, qa, prod]
       fail-fast: false
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+      TF_LOG: DEBUG
 
     steps:
       - name: Checkout code
@@ -33,19 +40,23 @@ jobs:
       - name: Terraform Init
         working-directory: deployment/aas/env/${{ matrix.environment }}
         run: terraform init
+
+      - name: Resolve django secret key
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          SECRET_DEV: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_DEV }}
+          SECRET_QA: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_QA }}
+          SECRET_PROD: ${{ secrets.TF_VAR_DJANGO_SECRET_KEY_AAS_PROD }}
+        run: |
+          case "${{ matrix.environment }}" in
+            dev)  echo "TF_VAR_django_secret_key=$SECRET_DEV"  >> $GITHUB_ENV ;;
+            qa)   echo "TF_VAR_django_secret_key=$SECRET_QA"   >> $GITHUB_ENV ;;
+            prod) echo "TF_VAR_django_secret_key=$SECRET_PROD" >> $GITHUB_ENV ;;
+          esac
+
+      - name: Terraform Plan Destroy
+        working-directory: deployment/aas/env/${{ matrix.environment }}
+        run: terraform plan -destroy -no-color -lock-timeout=5m
 
       - name: Terraform Destroy
         working-directory: deployment/aas/env/${{ matrix.environment }}
         run: terraform destroy -auto-approve -lock-timeout=5m
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
