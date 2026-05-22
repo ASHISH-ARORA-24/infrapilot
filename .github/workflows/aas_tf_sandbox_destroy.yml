@@ -1,0 +1,65 @@
+name: AAS TF Sandbox Destroy
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+    inputs:
+      log_level:
+        description: "Terraform log level (none = normal output)"
+        required: false
+        type: choice
+        default: none
+        options:
+          - none
+          - DEBUG
+          - TRACE
+          - INFO
+          - WARN
+          - ERROR
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  destroy:
+    name: Destroy (sandbox)
+    runs-on: ubuntu-latest
+    concurrency:
+      group: tf-aas-sandbox
+      cancel-in-progress: false
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure Terraform logging
+        if: inputs.log_level != '' && inputs.log_level != 'none'
+        run: echo "TF_LOG=${{ inputs.log_level }}" >> $GITHUB_ENV
+
+      - name: Terraform Init
+        working-directory: deployment/aas/env/sandbox
+        run: terraform init
+
+      - name: Generate django secret key
+        run: echo "TF_VAR_django_secret_key=$(openssl rand -base64 32)" >> $GITHUB_ENV
+
+      - name: Terraform Plan Destroy
+        working-directory: deployment/aas/env/sandbox
+        run: terraform plan -destroy -no-color -lock-timeout=5m
+
+      - name: Terraform Destroy
+        working-directory: deployment/aas/env/sandbox
+        run: terraform destroy -auto-approve -lock-timeout=5m
