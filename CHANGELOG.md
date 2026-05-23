@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.6.1 (2026-05-23)
+
+### Bug Fixes
+
+- Add [skip ci] to semantic-release commit message to prevent duplicate pipeline runs
+  ([`89f22bd`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/89f22bd06a84bb801bd1187b9380a59eded73e9a))
+
+
 ## v1.6.0 (2026-05-23)
 
 ### Chores
