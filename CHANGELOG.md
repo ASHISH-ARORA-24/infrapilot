@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.7.0 (2026-05-23)
+
+### Bug Fixes
+
+- Update dashboard subtitle to test slot swap
+  ([`f6644a6`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/f6644a60efad84a38536fc4877c5da67ff104299))
+
+### Features
+
+- Add postgresql and keyvault to dev, qa, and prod environments
+  ([`4f4910f`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/4f4910fbb72080848304e80294926eb0a33eb5fe))
+
+
 ## v1.6.1 (2026-05-23)
 
 ### Bug Fixes
