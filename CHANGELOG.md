@@ -2,6 +2,33 @@
 
 <!-- version list -->
 
+## v1.6.0 (2026-05-23)
+
+### Chores
+
+- Add CODEOWNERS to require ashish arora review on all PRs
+  ([`229c573`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/229c573be01ec04cc93e2b97a8768f8a10ecfbbd))
+
+- Add github environments setup to bootstrap script
+  ([`e67b550`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/e67b550b521fe093374c5b1688db9f138df340dc))
+
+### Continuous Integration
+
+- Fix deploy pipeline job names to reflect slot swaps
+  ([`a80630d`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/a80630d2da519483403b635d5185b5d127ac05ba))
+
+### Features
+
+- Add staging slots, upgrade sku to s1, add deploy pipeline
+  ([`c5e4131`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/c5e4131f3b5d52a636f287dddd63a94a9f34a21b))
+
+- Fix release pipeline token and update dashboard subtitle
+  ([`188116a`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/188116aa16db673d06a5c3e9e7664c48fc10e4f9))
+
+- Update dashboard branding to Wings
+  ([`f702efb`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/f702efbe9c5363997b175464e344956d2c7b4a6d))
+
+
 ## v1.5.0 (2026-05-22)
 
 ### Continuous Integration
