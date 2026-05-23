@@ -78,7 +78,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -94,7 +94,7 @@ jobs:
       - name: Run semantic release
         run: uv run semantic-release version
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
 
   bootstrap_acr:
     name: Bootstrap ACR
