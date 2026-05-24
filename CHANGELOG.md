@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.8.0 (2026-05-24)
+
+### Features
+
+- Add footer to dashboard
+  ([`4e11b26`](https://github.com/ASHISH-ARORA-24/infrapilot/commit/4e11b263e4858bcfcf44ba1720a1fd6935888cd8))
+
+
 ## v1.7.0 (2026-05-23)
 
 ### Bug Fixes
