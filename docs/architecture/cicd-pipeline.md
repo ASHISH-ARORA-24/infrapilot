@@ -110,6 +110,105 @@ App is live across all environments
 
 ---
 
+## Infra Pipelines
+
+There are 6 infrastructure pipelines, each serving a distinct purpose.
+
+---
+
+### `aas_tf_plan_apply.yml` — Auto Plan and Apply
+
+**Trigger:** Automatically on PR or merge to `main`, but **only when files under `deployment/aas/env/`** change.
+
+**Smart change detection:** Uses `dorny/paths-filter` to detect which environment folder changed. If only `dev/` was touched, only the dev job runs. If all three changed, all three run in parallel. No unnecessary applies.
+
+**On PR:** Runs `terraform plan` and posts the full output as a comment on the PR — so you can review exactly what will change in Azure before merging.
+
+**On merge to main:** Runs `terraform plan` + `terraform apply` automatically.
+
+This pipeline delegates the actual work to `_aas_tf_env.yml`.
+
+---
+
+### `_aas_tf_env.yml` — Reusable Terraform Worker
+
+Not triggered directly — called by `aas_tf_plan_apply.yml`. Acts as a shared function to avoid duplicating plan/apply logic. Takes `environment`, `working_dir`, and `apply` as inputs.
+
+---
+
+### `aas_tf_apply.yml` — Manual On-Demand Apply
+
+**Trigger:** Manual only — you pick the environment (dev/qa/prod) from a dropdown in GitHub Actions.
+
+**Difference from `aas_tf_plan_apply.yml`:** Skips the plan step and goes straight to `terraform apply`. No change detection — runs whatever environment you select.
+
+**Primary use case:** Re-provisioning an environment from scratch after it has been destroyed. Since no Terraform files changed, `aas_tf_plan_apply.yml` would not trigger — this pipeline is the only way to provision in that scenario.
+
+---
+
+### `aas_tf_destroy.yml` — Scheduled Environment Destroyer
+
+**Trigger:** Every hour (`0 * * * *`) or manually via `workflow_dispatch`.
+
+**What it does:** Destroys dev, qa, and prod simultaneously using a matrix strategy. Each environment runs in parallel with `fail-fast: false` so one failure doesn't stop the others.
+
+**Why scheduled?** Cost saving — resources are torn down automatically every hour so you are not paying for idle Azure infrastructure.
+
+**Manual trigger bonus:** Accepts a `log_level` input (DEBUG, TRACE, INFO, etc.) for troubleshooting failed destroys.
+
+---
+
+### `aas_tf_sandbox_destroy.yml` — Sandbox Destroyer
+
+Same as `aas_tf_destroy.yml` but scoped to the sandbox environment only, also on the hourly schedule.
+
+**Key difference from other environments:** Sandbox generates a fresh random Django secret key on every run (`openssl rand -base64 32`) instead of reading from GitHub secrets, because sandbox is ephemeral and not tied to persistent secrets.
+
+---
+
+### `aas_tf_unlock.yml` — State Lock Breaker
+
+**Trigger:** Manual only.
+
+**Problem it solves:** Terraform stores a lock in Azure Blob Storage to prevent two applies running simultaneously. If a pipeline crashes mid-apply, the lock is never released — all future applies fail with a "state locked" error.
+
+**What it does:** Breaks the blob lease on the `tfstate` file for the selected environment, freeing the lock so Terraform can run again.
+
+---
+
+### Infra Pipeline Flow
+
+```
+Terraform file changed in a PR
+          ↓
+aas_tf_plan_apply.yml → plan output posted as PR comment
+          ↓
+PR merged to main
+          ↓
+aas_tf_plan_apply.yml → auto applies the change
+
+─────────────────────────────────────────
+
+Environment destroyed, need to re-provision?
+          ↓
+aas_tf_apply.yml (manual, pick environment)
+
+─────────────────────────────────────────
+
+Every hour (cost saving)
+          ↓
+aas_tf_destroy.yml        → destroys dev + qa + prod
+aas_tf_sandbox_destroy.yml → destroys sandbox
+
+─────────────────────────────────────────
+
+Apply stuck / state lock error?
+          ↓
+aas_tf_unlock.yml (manual, pick environment)
+```
+
+---
+
 ## Common Issues and Fixes
 
 | Issue | Root Cause | Fix |
