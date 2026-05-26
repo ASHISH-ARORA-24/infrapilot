@@ -11,8 +11,8 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "rg-infrap-bootstrap"
-    storage_account_name = "stinfrapilottf"
+    resource_group_name  = "rg-wings-bootstrap"
+    storage_account_name = "stwingstf"
     container_name       = "tfstate"
     key                  = "aas_sandbox.tfstate"
   }

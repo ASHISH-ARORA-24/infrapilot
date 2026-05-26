@@ -1,5 +1,5 @@
 def main():
-    print("Hello from infrapilot!")
+    print("Hello from wings!")
 
 
 if __name__ == "__main__":

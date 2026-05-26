@@ -109,19 +109,19 @@ jobs:
 
       - name: Ensure bootstrap resource group exists
         run: |
-          if ! az group show --name rg-infrap-bootstrap &>/dev/null; then
-            az group create --name rg-infrap-bootstrap --location southindia
+          if ! az group show --name rg-wings-bootstrap &>/dev/null; then
+            az group create --name rg-wings-bootstrap --location southindia
           fi
 
       - name: Ensure ACR exists
         run: |
-          if ! az acr show --name crinfrap --resource-group rg-infrap-bootstrap &>/dev/null; then
-            az acr create --resource-group rg-infrap-bootstrap --name crinfrap --sku Basic --admin-enabled false
+          if ! az acr show --name crwings --resource-group rg-wings-bootstrap &>/dev/null; then
+            az acr create --resource-group rg-wings-bootstrap --name crwings --sku Basic --admin-enabled false
           fi
 
       - name: Ensure AcrPush role for service principal
         run: |
-          ACR_ID=$(az acr show --name crinfrap --query id -o tsv)
+          ACR_ID=$(az acr show --name crwings --query id -o tsv)
           EXISTING=$(az role assignment list --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID --query "length(@)" -o tsv)
           if [ "$EXISTING" = "0" ]; then
             az role assignment create --assignee ${{ secrets.AZURE_CLIENT_ID }} --role AcrPush --scope $ACR_ID
@@ -165,7 +165,7 @@ jobs:
       - name: Log in to Azure Container Registry
         uses: docker/login-action@v3
         with:
-          registry: crinfrap.azurecr.io
+          registry: crwings.azurecr.io
           username: ${{ secrets.AZURE_CLIENT_ID }}
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
@@ -175,5 +175,5 @@ jobs:
           context: .
           push: true
           tags: |
-            crinfrap.azurecr.io/infrapilot:${{ steps.meta.outputs.version }}
-            crinfrap.azurecr.io/infrapilot:latest
+            crwings.azurecr.io/wings:${{ steps.meta.outputs.version }}
+            crwings.azurecr.io/wings:latest

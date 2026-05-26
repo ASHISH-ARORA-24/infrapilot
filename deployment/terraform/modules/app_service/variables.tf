@@ -1,7 +1,7 @@
 variable "project" {
   description = "Short project name used in resource naming"
   type        = string
-  default     = "infrap"
+  default     = "wings"
 }
 
 variable "deployment_type" {
@@ -32,13 +32,13 @@ variable "service_plan_id" {
 variable "acr_name" {
   description = "Name of the Azure Container Registry"
   type        = string
-  default     = "crinfrap"
+  default     = "crwings"
 }
 
 variable "image_name" {
   description = "Container image name"
   type        = string
-  default     = "infrapilot"
+  default     = "wingsilot"
 }
 
 variable "image_tag" {

@@ -14,10 +14,10 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  PROJECT: infrap
+  PROJECT: wings
   DEPLOYMENT_TYPE: aas
-  ACR: crinfrap.azurecr.io
-  IMAGE: infrapilot
+  ACR: crwings.azurecr.io
+  IMAGE: wings
 
 jobs:
   deploy_dev:
