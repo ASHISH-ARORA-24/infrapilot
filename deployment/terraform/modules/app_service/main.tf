@@ -1,6 +1,6 @@
 data "azurerm_container_registry" "acr" {
   name                = var.acr_name
-  resource_group_name = "rg-infrap-bootstrap"
+  resource_group_name = "rg-wings-bootstrap"
 }
 
 resource "azurerm_linux_web_app" "this" {

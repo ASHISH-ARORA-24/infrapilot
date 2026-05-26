@@ -1,7 +1,7 @@
 variable "project" {
   description = "Short project name used in resource naming"
   type        = string
-  default     = "infrap"
+  default     = "wings"
 }
 
 variable "deployment_type" {

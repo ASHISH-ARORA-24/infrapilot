@@ -31,7 +31,7 @@ jobs:
       - name: Break Terraform state lock
         run: |
           az storage blob lease break \
-            --account-name stinfrapilottf \
+            --account-name stwingstf \
             --container-name tfstate \
             --blob-name "aas_${ENVIRONMENT}.tfstate" \
             --account-key "$ARM_ACCESS_KEY"
